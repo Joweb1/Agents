@@ -7,7 +7,6 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { Storage } from '../config/storage.js';
-import type { GeminiClient } from './client.js';
 import { debugLogger } from '../utils/debugLogger.js';
 
 export class HeartbeatService {
@@ -15,7 +14,7 @@ export class HeartbeatService {
   private readonly heartbeatPath: string;
   private isRunning = false;
 
-  constructor(private readonly geminiClient: GeminiClient) {
+  constructor() {
     const globalDir = Storage.getGlobalGeminiDir();
     this.heartbeatPath = path.join(globalDir, 'heartbeat.md');
     this.ensureInitialized();

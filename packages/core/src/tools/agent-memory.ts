@@ -22,6 +22,11 @@ class AgentMemoryToolInvocation extends BaseToolInvocation<
   AgentMemoryParams,
   ToolResult
 > {
+  getDescription(): string {
+    const { type, operation } = this.params;
+    return `Updating agent memory (type: ${type}, operation: ${operation})`;
+  }
+
   async execute(_signal: AbortSignal): Promise<ToolResult> {
     const { type, content, operation } = this.params;
     const memoryManager = MemoryManager.getInstance();

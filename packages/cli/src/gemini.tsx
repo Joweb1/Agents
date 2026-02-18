@@ -564,7 +564,7 @@ export async function main() {
     loadConfigHandle?.end();
 
     if (config.isWatchEnabled()) {
-      const heartbeatService = new HeartbeatService(config.getGeminiClient());
+      const heartbeatService = new HeartbeatService();
       heartbeatService.start();
       registerCleanup(() => heartbeatService.stop());
     }

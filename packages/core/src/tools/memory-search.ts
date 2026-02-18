@@ -18,6 +18,10 @@ class MemorySearchToolInvocation extends BaseToolInvocation<
   MemorySearchParams,
   ToolResult
 > {
+  getDescription(): string {
+    return `Searching agent's long-term memory for "${this.params.query}"`;
+  }
+
   async execute(_signal: AbortSignal): Promise<ToolResult> {
     const { query, limit = 5 } = this.params;
     const memoryManager = MemoryManager.getInstance();
