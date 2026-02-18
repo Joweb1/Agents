@@ -45,9 +45,7 @@ class AgentMemoryToolInvocation extends BaseToolInvocation<
 
       if (operation === 'append') {
         const current = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : '';
-        newContent = current + '
-
-' + content;
+        newContent = current + '\n\n' + content;
       }
 
       fs.writeFileSync(filePath, newContent);
@@ -75,7 +73,7 @@ export class AgentMemoryTool extends BaseDeclarativeTool<
     super(
       AgentMemoryTool.Name,
       'ManageAgentMemory',
-      'Manage the agent's personal memory (soul, user facts, and long-term insights). Use this to update your identity, user preferences, or save important long-term facts.',
+      "Manage the agent's personal memory (soul, user facts, and long-term insights). Use this to update your identity, user preferences, or save important long-term facts.",
       Kind.Think,
       {
         type: 'object',

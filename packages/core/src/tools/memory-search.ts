@@ -54,7 +54,7 @@ export class MemorySearchTool extends BaseDeclarativeTool<
     super(
       MemorySearchTool.Name,
       'SearchAgentMemory',
-      'Search through the agent's long-term memory for relevant facts or insights.',
+      "Search through the agent's long-term memory for relevant facts or insights.",
       Kind.Think,
       {
         type: 'object',

@@ -56,8 +56,7 @@ export class HeartbeatService {
 
     try {
       const content = fs.readFileSync(this.heartbeatPath, 'utf8').trim();
-      const lines = content.split('
-').filter(l => l.trim() && !l.startsWith('#'));
+      const lines = content.split('\n').filter(l => l.trim() && !l.startsWith('#'));
 
       if (lines.length > 0) {
         debugLogger.log('Heartbeat tasks found, triggering proactive turn');
