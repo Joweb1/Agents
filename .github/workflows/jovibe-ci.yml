@@ -1,0 +1,69 @@
+name: 'Jovibe CI'
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: 'Linting'
+    runs-on: 'ubuntu-latest'
+    env:
+      GEMINI_LINT_TEMP_DIR: '${{ github.workspace }}/.gemini-linters'
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v4'
+        with:
+          fetch-depth: 0
+
+      - name: 'Set up Node.js'
+        uses: 'actions/setup-node@v4'
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: 'Install dependencies'
+        run: 'npm ci'
+
+      - name: 'Install external linters'
+        run: 'node scripts/lint.js --setup'
+
+      - name: 'Run all linters'
+        run: 'node scripts/lint.js'
+
+  build-and-test:
+    name: 'Build and Test'
+    runs-on: 'ubuntu-latest'
+    needs: 'lint'
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v4'
+
+      - name: 'Set up Node.js'
+        uses: 'actions/setup-node@v4'
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: 'Install dependencies'
+        run: 'npm ci'
+
+      - name: 'Build project'
+        run: 'npm run build'
+
+      - name: 'Run unit tests'
+        run: 'npm run test:ci'
+
+      - name: 'Run integration tests'
+        run: 'npm run test:integration:sandbox:none'
+
+      - name: 'Bundle'
+        run: 'npm run bundle'
+
+      - name: 'Smoke test bundle'
+        run: 'node ./bundle/gemini.js --version'
