@@ -100,7 +100,8 @@ Concise when needed, thorough when it matters. Not a corporate drone.`;
     // For now, just get the last 5 entries as "long term memory"
     // Later we will implement RAG/Vector search
     const entries = this.db?.prepare('SELECT content FROM memory_entries ORDER BY timestamp DESC LIMIT 5').all();
-    const typedEntries = (entries ?? []) as unknown as Array<{ content: string }>;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+    const typedEntries = (entries ?? []) as Array<{ content: string }>;
     
     return {
       soul,
