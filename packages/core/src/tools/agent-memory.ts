@@ -4,11 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  BaseDeclarativeTool,
-  BaseToolInvocation,
-  Kind,
-} from './tools.js';
+import { BaseDeclarativeTool, BaseToolInvocation, Kind } from './tools.js';
 import type { ToolResult } from './tools.js';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
@@ -35,7 +31,10 @@ class AgentMemoryToolInvocation extends BaseToolInvocation<
       if (type === 'long_term') {
         memoryManager.saveMemory(content);
         return {
-          llmContent: JSON.stringify({ success: true, message: 'Saved to long-term memory' }),
+          llmContent: JSON.stringify({
+            success: true,
+            message: 'Saved to long-term memory',
+          }),
           returnDisplay: 'Saved to long-term memory (SQLite)',
         };
       }
@@ -44,14 +43,19 @@ class AgentMemoryToolInvocation extends BaseToolInvocation<
       let newContent = content;
 
       if (operation === 'append') {
-        const current = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : '';
+        const current = fs.existsSync(filePath)
+          ? fs.readFileSync(filePath, 'utf8')
+          : '';
         newContent = current + '\n\n' + content;
       }
 
       fs.writeFileSync(filePath, newContent);
 
       return {
-        llmContent: JSON.stringify({ success: true, message: `Updated ${type}.md` }),
+        llmContent: JSON.stringify({
+          success: true,
+          message: `Updated ${type}.md`,
+        }),
         returnDisplay: `Updated ${type}.md`,
       };
     } catch (error) {
@@ -86,7 +90,8 @@ export class AgentMemoryTool extends BaseDeclarativeTool<
           operation: {
             type: 'string',
             enum: ['append', 'replace', 'add_entry'],
-            description: 'The operation to perform. "add_entry" is for long_term (SQLite).',
+            description:
+              'The operation to perform. "add_entry" is for long_term (SQLite).',
           },
           content: {
             type: 'string',
@@ -103,6 +108,11 @@ export class AgentMemoryTool extends BaseDeclarativeTool<
     params: AgentMemoryParams,
     messageBus: MessageBus,
   ) {
-    return new AgentMemoryToolInvocation(params, messageBus, this.name, this.displayName);
+    return new AgentMemoryToolInvocation(
+      params,
+      messageBus,
+      this.name,
+      this.displayName,
+    );
   }
 }

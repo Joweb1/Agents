@@ -34,11 +34,16 @@ export class HeartbeatService {
   start(intervalMinutes: number = 30) {
     if (this.intervalId) return;
 
-    debugLogger.log(`Starting heartbeat service every ${intervalMinutes} minutes`);
-    this.intervalId = setInterval(() => {
-      void this.checkHeartbeat();
-    }, intervalMinutes * 60 * 1000);
-    
+    debugLogger.log(
+      `Starting heartbeat service every ${intervalMinutes} minutes`,
+    );
+    this.intervalId = setInterval(
+      () => {
+        void this.checkHeartbeat();
+      },
+      intervalMinutes * 60 * 1000,
+    );
+
     // Initial check
     void this.checkHeartbeat();
   }
@@ -56,7 +61,9 @@ export class HeartbeatService {
 
     try {
       const content = fs.readFileSync(this.heartbeatPath, 'utf8').trim();
-      const lines = content.split('\n').filter(l => l.trim() && !l.startsWith('#'));
+      const lines = content
+        .split('\n')
+        .filter((l) => l.trim() && !l.startsWith('#'));
 
       if (lines.length > 0) {
         debugLogger.log('Heartbeat tasks found, triggering proactive turn');
@@ -77,15 +84,15 @@ export class HeartbeatService {
 ${content}
 
 Please analyze and perform any necessary actions. If a task is completed, you can suggest removing it from heartbeat.md using manage_agent_memory if you implement that, or just inform the user.`;
-    
+
     // Since we are in a proactive mode, we might want a way to not block the main UI
     // but for now, we'll just emit it as if it's a hidden user message.
     // In a real background daemon, it would run in a separate session.
-    
+
     // For now, let's just log it. Integrating with the UI loop requires more work.
     debugLogger.log('Proactive turn prompt:', prompt);
-    
-    // TODO: Implement actual turn execution. 
+
+    // TODO: Implement actual turn execution.
     // This likely requires a way to inject a message into the current session's stream
     // or start a background session.
   }

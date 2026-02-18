@@ -4,11 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  BaseDeclarativeTool,
-  BaseToolInvocation,
-  Kind,
-} from './tools.js';
+import { BaseDeclarativeTool, BaseToolInvocation, Kind } from './tools.js';
 import type { ToolResult } from './tools.js';
 import { MemoryManager } from '../memory/MemoryManager.js';
 import type { MessageBus } from '../confirmation-bus/message-bus.js';
@@ -30,7 +26,7 @@ class MemorySearchToolInvocation extends BaseToolInvocation<
     // Basic implementation: filter by query string
     // Later we can implement actual semantic search with embeddings
     const results = context.longTermMemory
-      .filter(m => m.toLowerCase().includes(query.toLowerCase()))
+      .filter((m) => m.toLowerCase().includes(query.toLowerCase()))
       .slice(0, limit);
 
     return {
@@ -79,6 +75,11 @@ export class MemorySearchTool extends BaseDeclarativeTool<
     params: MemorySearchParams,
     messageBus: MessageBus,
   ) {
-    return new MemorySearchToolInvocation(params, messageBus, this.name, this.displayName);
+    return new MemorySearchToolInvocation(
+      params,
+      messageBus,
+      this.name,
+      this.displayName,
+    );
   }
 }

@@ -289,7 +289,8 @@ export async function parseArguments(
         })
         .option('watch', {
           type: 'boolean',
-          description: 'Run the agent in proactive mode, checking heartbeat.md periodically.',
+          description:
+            'Run the agent in proactive mode, checking heartbeat.md periodically.',
           default: false,
         }),
     )

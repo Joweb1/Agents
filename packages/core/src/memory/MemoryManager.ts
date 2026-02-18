@@ -28,7 +28,7 @@ export class MemoryManager {
     this.soulPath = path.join(this.globalDir, 'soul.md');
     this.userPath = path.join(this.globalDir, 'user.md');
     this.dbPath = path.join(this.globalDir, 'memory.db');
-    
+
     this.ensureInitialized();
   }
 
@@ -79,7 +79,7 @@ Concise when needed, thorough when it matters. Not a corporate drone.`;
   private initializeDatabase() {
     this.db = new Database(this.dbPath);
     this.db.pragma('journal_mode = WAL');
-    
+
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS memory_entries (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -96,21 +96,27 @@ Concise when needed, thorough when it matters. Not a corporate drone.`;
   getContext(): MemoryContext {
     const soul = fs.readFileSync(this.soulPath, 'utf8');
     const user = fs.readFileSync(this.userPath, 'utf8');
-    
+
     // For now, just get the last 5 entries as "long term memory"
     // Later we will implement RAG/Vector search
-    const entries = this.db?.prepare('SELECT content FROM memory_entries ORDER BY timestamp DESC LIMIT 5').all();
+    const entries = this.db
+      ?.prepare(
+        'SELECT content FROM memory_entries ORDER BY timestamp DESC LIMIT 5',
+      )
+      .all();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
     const typedEntries = (entries ?? []) as Array<{ content: string }>;
-    
+
     return {
       soul,
       user,
-      longTermMemory: typedEntries.map(e => e.content),
+      longTermMemory: typedEntries.map((e) => e.content),
     };
   }
 
   saveMemory(content: string, tags?: string[]) {
-    this.db?.prepare('INSERT INTO memory_entries (content, tags) VALUES (?, ?)').run(content, tags?.join(','));
+    this.db
+      ?.prepare('INSERT INTO memory_entries (content, tags) VALUES (?, ?)')
+      .run(content, tags?.join(','));
   }
 }
