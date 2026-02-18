@@ -8,8 +8,8 @@ import {
   BaseDeclarativeTool,
   BaseToolInvocation,
   Kind,
-  ToolResult,
 } from './tools.js';
+import type { ToolResult } from './tools.js';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { MemoryManager } from '../memory/MemoryManager.js';

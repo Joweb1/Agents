@@ -8,8 +8,8 @@ import {
   BaseDeclarativeTool,
   BaseToolInvocation,
   Kind,
-  ToolResult,
 } from './tools.js';
+import type { ToolResult } from './tools.js';
 import { MemoryManager } from '../memory/MemoryManager.js';
 import type { MessageBus } from '../confirmation-bus/message-bus.js';
 

@@ -32,7 +32,7 @@ export class MemoryManager {
     this.ensureInitialized();
   }
 
-  public static getInstance(): MemoryManager {
+  static getInstance(): MemoryManager {
     if (!MemoryManager.instance) {
       MemoryManager.instance = new MemoryManager();
     }
@@ -93,22 +93,23 @@ Concise when needed, thorough when it matters. Not a corporate drone.`;
     `);
   }
 
-  public getContext(): MemoryContext {
+  getContext(): MemoryContext {
     const soul = fs.readFileSync(this.soulPath, 'utf8');
     const user = fs.readFileSync(this.userPath, 'utf8');
     
     // For now, just get the last 5 entries as "long term memory"
     // Later we will implement RAG/Vector search
-    const entries = this.db?.prepare('SELECT content FROM memory_entries ORDER BY timestamp DESC LIMIT 5').all() as { content: string }[];
+    const entries = this.db?.prepare('SELECT content FROM memory_entries ORDER BY timestamp DESC LIMIT 5').all();
+    const typedEntries = (entries ?? []) as unknown as Array<{ content: string }>;
     
     return {
       soul,
       user,
-      longTermMemory: entries.map(e => e.content),
+      longTermMemory: typedEntries.map(e => e.content),
     };
   }
 
-  public saveMemory(content: string, tags?: string[]) {
+  saveMemory(content: string, tags?: string[]) {
     this.db?.prepare('INSERT INTO memory_entries (content, tags) VALUES (?, ?)').run(content, tags?.join(','));
   }
 }

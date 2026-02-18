@@ -31,19 +31,19 @@ export class HeartbeatService {
     }
   }
 
-  public start(intervalMinutes: number = 30) {
+  start(intervalMinutes: number = 30) {
     if (this.intervalId) return;
 
     debugLogger.log(`Starting heartbeat service every ${intervalMinutes} minutes`);
     this.intervalId = setInterval(() => {
-      this.checkHeartbeat();
+      void this.checkHeartbeat();
     }, intervalMinutes * 60 * 1000);
     
     // Initial check
-    this.checkHeartbeat();
+    void this.checkHeartbeat();
   }
 
-  public stop() {
+  stop() {
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = undefined;
