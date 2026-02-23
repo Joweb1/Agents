@@ -17,7 +17,7 @@ jobs:
       GEMINI_LINT_TEMP_DIR: '${{ github.workspace }}/.gemini-linters'
     steps:
       - name: 'Checkout'
-        uses: 'actions/checkout@v4'
+        uses: 'actions/checkout@v6'
         with:
           fetch-depth: 0
 
@@ -42,7 +42,7 @@ jobs:
     needs: 'lint'
     steps:
       - name: 'Checkout'
-        uses: 'actions/checkout@v4'
+        uses: 'actions/checkout@v6'
 
       - name: 'Set up Node.js'
         uses: 'actions/setup-node@v4'
